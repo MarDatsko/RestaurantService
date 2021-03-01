@@ -28,7 +28,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public Product getProductsFromStock(String id, Integer count) {
-        Product product = productService.findById(id);
+        Product product = productService.findByName(id);
         int value = product.getCount() - count;
         if (value < 0 ){
             throw new NotEnoughProductsInStock("Not enough " + product.getName() + " in stock.");

@@ -10,6 +10,5 @@ public class EuropeRestaurantApplication {
     public static void main(String[] args) {
         SpringApplication.run(EuropeRestaurantApplication.class, args);
     }
-
 }
 

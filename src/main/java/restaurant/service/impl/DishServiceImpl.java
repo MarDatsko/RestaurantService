@@ -1,13 +1,16 @@
 package restaurant.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import restaurant.exception.NotFoundException;
 import restaurant.model.Dish;
+import restaurant.model.dto.MenuDishDto;
 import restaurant.repository.DishRepository;
 import restaurant.service.DishService;
 
@@ -16,10 +19,12 @@ import restaurant.service.DishService;
 public class DishServiceImpl implements DishService {
 
     private final DishRepository dishRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public DishServiceImpl(DishRepository dishRepository) {
+    public DishServiceImpl(DishRepository dishRepository, ModelMapper modelMapper) {
         this.dishRepository = dishRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -45,5 +50,12 @@ public class DishServiceImpl implements DishService {
     @Override
     public void deleteById(String id) {
         dishRepository.deleteById(id);
+    }
+
+    @Override
+    public List<MenuDishDto> showRestaurantMenu(){
+        List<Dish> all = dishRepository.findAll();
+        List<MenuDishDto> collect = all.stream().map(dish -> modelMapper.map(dish, MenuDishDto.class)).collect(Collectors.toList());
+        return collect;
     }
 }

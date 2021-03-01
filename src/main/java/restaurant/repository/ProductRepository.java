@@ -7,4 +7,6 @@ import restaurant.model.Product;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product,String> {
+
+    Product findByName(String name);
 }
