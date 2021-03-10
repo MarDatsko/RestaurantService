@@ -3,7 +3,7 @@ package restaurant.service;
 import java.util.List;
 
 import restaurant.model.Dish;
-import restaurant.model.dto.MenuDishDto;
+import restaurant.model.RestaurantMenu;
 
 public interface DishService {
 
@@ -17,5 +17,7 @@ public interface DishService {
 
     void deleteById(String id);
 
-    List<MenuDishDto> showRestaurantMenu();
+    RestaurantMenu showRestaurantMenu();
+
+    Dish getDishByName(String name);
 }

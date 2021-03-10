@@ -7,4 +7,6 @@ import restaurant.model.Dish;
 
 @Repository
 public interface DishRepository extends MongoRepository<Dish,String> {
+
+    Dish getDishByName(String name);
 }

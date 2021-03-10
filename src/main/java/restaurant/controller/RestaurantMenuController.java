@@ -1,39 +1,39 @@
 package restaurant.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
+import lombok.AllArgsConstructor;
 import restaurant.model.RestaurantMenu;
-import restaurant.model.dto.MenuDishDto;
+import restaurant.model.Bill;
+import restaurant.model.FirstOrder;
+import restaurant.model.dto.OrderListWrapper;
 import restaurant.service.DishService;
-import restaurant.service.OrderService;
+import restaurant.service.StockService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/menu")
 public class RestaurantMenuController {
 
-    private final OrderService orderService;
     private final DishService dishService;
-
-    @Autowired
-    public RestaurantMenuController(OrderService orderService, DishService dishService) {
-        this.orderService = orderService;
-        this.dishService = dishService;
-    }
+    private final StockService stockService;
 
     @GetMapping
-    public List<MenuDishDto> showMenu(){
+    public RestaurantMenu showMenu() {
         return dishService.showRestaurantMenu();
     }
 
-    @GetMapping("/")
-    public String makeOrder(@RequestParam String order){
-        orderService.makeOrder(List.of(order));
-        return "good";
+    @PostMapping("order/check")
+    public FirstOrder checkOrder(@RequestBody OrderListWrapper order) {
+        return stockService.canWeMakeListOfDish(order.getOrderList());
+    }
+
+    @PostMapping("order/make")
+    public Bill makeOrder(@RequestBody OrderListWrapper order) {
+        return stockService.makeOrder(order.getOrderList());
     }
 }

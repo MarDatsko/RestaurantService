@@ -11,18 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import restaurant.model.Dish;
 import restaurant.service.DishService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/dish")
 public class DishController {
 
     private final DishService dishService;
-
-    public DishController(DishService dishService) {
-        this.dishService = dishService;
-    }
 
     @PostMapping
     public String saveDish(@RequestBody Dish dish) {

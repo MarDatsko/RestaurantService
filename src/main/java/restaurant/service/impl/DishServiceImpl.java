@@ -2,14 +2,15 @@ package restaurant.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import restaurant.exception.NotFoundException;
+import lombok.SneakyThrows;
 import restaurant.model.Dish;
+import restaurant.model.RestaurantMenu;
 import restaurant.model.dto.MenuDishDto;
 import restaurant.repository.DishRepository;
 import restaurant.service.DishService;
@@ -37,9 +38,10 @@ public class DishServiceImpl implements DishService {
         return dishRepository.save(newDish);
     }
 
+    @SneakyThrows
     @Override
     public Dish findById(String id) {
-        return dishRepository.findById(id).orElseThrow(() -> new NotFoundException("Dish with ID - " + id + " doesn't exist"));
+        return dishRepository.findById(id).orElseThrow(() -> new NotFoundException());
     }
 
     @Override
@@ -53,9 +55,18 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<MenuDishDto> showRestaurantMenu(){
+    public Dish getDishByName(String name) {
+        return dishRepository.getDishByName(name);
+    }
+
+    @Override
+    public RestaurantMenu showRestaurantMenu() {
+        RestaurantMenu restaurantMenu = new RestaurantMenu();
         List<Dish> all = dishRepository.findAll();
-        List<MenuDishDto> collect = all.stream().map(dish -> modelMapper.map(dish, MenuDishDto.class)).collect(Collectors.toList());
-        return collect;
+        for (Dish dish : all) {
+            MenuDishDto menuDishDto = modelMapper.map(dish, MenuDishDto.class);
+            restaurantMenu.addToList(dish.getType(), menuDishDto);
+        }
+        return restaurantMenu;
     }
 }
