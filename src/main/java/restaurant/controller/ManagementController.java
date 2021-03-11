@@ -13,40 +13,40 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import restaurant.model.Dish;
-import restaurant.service.DishService;
+import restaurant.service.ManagementService;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/dish")
-public class DishController {
+public class ManagementController {
 
-    private final DishService dishService;
+    private final ManagementService managementService;
 
     @PostMapping
     public String saveDish(@RequestBody Dish dish) {
-        dishService.saveDish(dish);
+        managementService.saveDish(dish);
         return "Dish was added" + dish;
     }
 
     @GetMapping("/{id}")
     public Dish getDishById(@PathVariable(name = "id") String id) {
-        return dishService.findById(id);
+        return managementService.findById(id);
     }
 
     @GetMapping()
     public List<Dish> getAllDish() {
-        return dishService.findAll();
+        return managementService.findAll();
     }
 
     @DeleteMapping("/{id}")
     public String deleteDishById(@PathVariable(name = "id") String id) {
-        dishService.deleteById(id);
+        managementService.deleteById(id);
         return "Dish with id " + id + "was deleted";
     }
 
     @PutMapping()
     public Dish updateDishById(@RequestBody Dish newDish) {
-        return dishService.updateDish(newDish);
+        return managementService.updateDish(newDish);
     }
 
 

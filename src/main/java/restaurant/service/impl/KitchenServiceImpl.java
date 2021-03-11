@@ -1,7 +1,5 @@
 package restaurant.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +10,7 @@ import restaurant.model.Dish;
 import restaurant.model.Ingredient;
 import restaurant.model.Order;
 import restaurant.model.Product;
-import restaurant.service.DishService;
+import restaurant.service.ManagementService;
 import restaurant.service.KitchenService;
 import restaurant.service.StockService;
 
@@ -20,12 +18,12 @@ import restaurant.service.StockService;
 @AllArgsConstructor
 public class KitchenServiceImpl implements KitchenService {
 
-    private final DishService dishService;
+    private final ManagementService managementService;
     private final StockService stockService;
 
     @Override
     public void makeDish(Order order) {
-        Dish dishByName = dishService.getDishByName(order.getDishName());
+        Dish dishByName = managementService.getDishByName(order.getDishName());
         if (stockService.canWeMakeDish(dishByName, order.getCount())) {
             Integer countPreviousElements = 0;
             List<Ingredient> ingredients = dishByName.getIngredients();

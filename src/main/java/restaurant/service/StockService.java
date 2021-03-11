@@ -31,12 +31,6 @@ public interface StockService {
 
     FirstOrder canWeMakeListOfDish(List<Order> order);
 
-    Bill makeOrder(List<Order> order);
-
-
-    //getSomeProducts
-    //getNumberOfLeftProduct
-
     // once a day check product expiration date, and delete
     // * send ADMIN(email) notification how much
 

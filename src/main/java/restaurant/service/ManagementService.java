@@ -2,10 +2,12 @@ package restaurant.service;
 
 import java.util.List;
 
+import restaurant.model.Bill;
 import restaurant.model.Dish;
+import restaurant.model.Order;
 import restaurant.model.RestaurantMenu;
 
-public interface DishService {
+public interface ManagementService {
 
     Dish saveDish(Dish dish);
 
@@ -20,4 +22,6 @@ public interface DishService {
     RestaurantMenu showRestaurantMenu();
 
     Dish getDishByName(String name);
+
+    Bill makeOrder(List<Order> order);
 }

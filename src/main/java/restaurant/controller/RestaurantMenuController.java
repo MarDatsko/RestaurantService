@@ -11,7 +11,7 @@ import restaurant.model.RestaurantMenu;
 import restaurant.model.Bill;
 import restaurant.model.FirstOrder;
 import restaurant.model.dto.OrderListWrapper;
-import restaurant.service.DishService;
+import restaurant.service.ManagementService;
 import restaurant.service.StockService;
 
 @AllArgsConstructor
@@ -19,12 +19,12 @@ import restaurant.service.StockService;
 @RequestMapping("/menu")
 public class RestaurantMenuController {
 
-    private final DishService dishService;
+    private final ManagementService managementService;
     private final StockService stockService;
 
     @GetMapping
     public RestaurantMenu showMenu() {
-        return dishService.showRestaurantMenu();
+        return managementService.showRestaurantMenu();
     }
 
     @PostMapping("order/check")
@@ -34,6 +34,6 @@ public class RestaurantMenuController {
 
     @PostMapping("order/make")
     public Bill makeOrder(@RequestBody OrderListWrapper order) {
-        return stockService.makeOrder(order.getOrderList());
+        return managementService.makeOrder(order.getOrderList());
     }
 }

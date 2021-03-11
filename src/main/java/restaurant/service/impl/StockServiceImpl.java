@@ -9,15 +9,13 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import restaurant.model.Dish;
+import restaurant.model.FirstOrder;
 import restaurant.model.Ingredient;
 import restaurant.model.Order;
 import restaurant.model.Product;
-import restaurant.model.Bill;
-import restaurant.model.FirstOrder;
 import restaurant.model.dto.ProductDto;
 import restaurant.repository.ProductRepository;
-import restaurant.service.DishService;
-import restaurant.service.KitchenService;
+import restaurant.service.ManagementService;
 import restaurant.service.StockService;
 
 @Service
@@ -25,9 +23,8 @@ import restaurant.service.StockService;
 public class StockServiceImpl implements StockService {
 
     private final ProductRepository productRepository;
-    private final DishService dishService;
+    private final ManagementService managementService;
     private final ModelMapper modelMapper;
-    private final KitchenService kitchenService;
 
     @Override
     public Product saveProduct(Product product) {
@@ -86,10 +83,10 @@ public class StockServiceImpl implements StockService {
         boolean canWe = false;
         FirstOrder firstOrder = new FirstOrder();
         for (Order element : order) {
-            List<Ingredient> ingredients = dishService.getDishByName(element.getDishName()).getIngredients();
+            List<Ingredient> ingredients = managementService.getDishByName(element.getDishName()).getIngredients();
             for (Ingredient ing : ingredients) {
                 canWe = enoughProductsForDish(element.getCount(), ing.getName(), ing.getCount());
-                if (!canWe){
+                if (!canWe) {
                     firstOrder.addToList(canWe, element.getDishName());
                     break;
                 }
@@ -105,16 +102,5 @@ public class StockServiceImpl implements StockService {
                 .map(Product::getCount)
                 .reduce(0, Integer::sum);
         return productsSum >= (count * dishCount);
-    }
-
-    @Override
-    public Bill makeOrder(List<Order> order) {
-        Bill bill = new Bill();
-        for (Order element : order) {
-            Dish dishByName = dishService.getDishByName(element.getDishName());
-            bill.addToBill(dishByName, element.getCount());
-            kitchenService.makeDish(element);
-        }
-        return bill;
     }
 }
